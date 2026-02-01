@@ -13,7 +13,7 @@ module.exports = {
     mysql: {
         host: process.env.MYSQL_HOST || 'localhost',
         user: process.env.MYSQL_USER || 'root',
-        password: process.env.MYSQL_PASSWORD || '',
-        database: process.env.MYSQL_DB || 'name_database'
+        password: process.env.MYSQL_PASSWORD || 'clave',
+        database: process.env.MYSQL_DB || 'restaurante'
     }
 }

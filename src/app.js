@@ -6,9 +6,11 @@ const error = require('./red/errors')
 
 const app = express();
 
-const clientes = require('./routes/clienteRutas');
-const users = require('./routes/userRutas');
-const auth = require('./routes/authRouter');
+// redir routers
+
+// const users = require('./routes/userRutas');
+// const auth = require('./routes/authRouter');
+const menu = require('./routes/menuRouter');
 
 
 // middleware
@@ -23,8 +25,9 @@ app.use(express.static(path.join(__dirname, '..', 'public')));
 
 
 // rutas API (auth)
-app.use('/api/user', users);
-app.use('/api/auth', auth);
+// app.use('/api/user', users);
+// app.use('/api/auth', auth);
+app.use('/api/menu', menu);
 
 
 // Ruta para la Vista (Relativa al servidor)
@@ -36,3 +39,4 @@ app.get('/login', (req, res) => {
 app.use(error);
 
 module.exports = app;
+

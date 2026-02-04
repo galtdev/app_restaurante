@@ -88,9 +88,9 @@ button:hover {
     background-color: #0056b3;
 }
 
-.error-msg {
+.msg-form {
     margin-top: 1rem;
-    color: #d93025;
+    color: green;
     font-size: 0.85rem;
     text-align: center;
     min-height: 1.2rem;

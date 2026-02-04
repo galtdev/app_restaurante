@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrar platillo</title>
+    <link rel="stylesheet" href="../css/forms.css">
+</head>
+<body>
+    <div class="container">
+        
+        <div class="form_container">
+            <form id="reg_platillo" class="form">
+                <h2>Platillo</h2>
+                <p>Ingresa el platillo</p>
+                
+                <div class="input-group">
+                    <label for="nombre">Nombre del platillo</label>
+                    <input name="nombre_platillo" type="text" id="nombre_platillo" placeholder="Nombre del platillo" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="precio">Precio</label>
+                    <input name="precio" type="number" id="precio" placeholder="Introduzca el precio" required>
+                </div>
+
+                 <div class="input-group">
+                    <label for="contenido">Contenido</label>
+                    <input name="contenido" type="text" id="contenido" placeholder="Descripcion del platillo" required>
+                </div>
+
+
+                <button type="submit" id="btnEnviar">Agregar Platillo</button>
+                
+                <div id="mensaje" class="msg-form"></div>
+            </form>
+        </div>
+
+    </div>
+    <script src="../js/api.js"></script>
+</body>
+</html>

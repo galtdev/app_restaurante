@@ -5,6 +5,7 @@ const upload = require('../middlewares/multer');
 const resp = require('../red/response');
 const controller = require('../controllers/menuController');
 
-router.get('/', controller.all);
+router.get('/', controller.store);
+router.post('/', controller.create);
 
 module.exports = router;

@@ -42,5 +42,32 @@ async function create(req, res, next){
     }
 }
 
-module.exports = {store, create}
+
+
+async function update(req, res, next){
+    try{
+        const items = await db.upsertPlatillo(TABLA, req.body);       
+        const data = { 
+            msj: 'registro actualizado con exito',
+            data: items
+        }
+        resp.success(req, res, data, 201);       
+    } catch (err){
+        next(err);
+    }
+}
+
+
+async function delet(req, res, next){
+    try{
+        const item = await db.delet(TABLA, req.body);
+
+        if(item.affectedRows > 0) resp.success(req, res, 'Eliminado Satisfactoriamete', 200)
+        else resp.error(req, res, 'No se encontro el dato', 404);
+    } catch (err){
+        next(err);
+    }
+}
+
+module.exports = {store, create, update, delet}
 

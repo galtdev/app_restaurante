@@ -1,0 +1,58 @@
+/* --------GENERAL-------- */
+
+body{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+
+/* ---------- CARDS MENU ----------- */
+
+.container{
+    width: 100%;
+    display: flex;
+}
+
+.card_container{
+    border: 1px solid gray;
+    border-radius: 4px;
+    padding: 40px;
+    margin: 20px;
+}
+
+.card_header{
+    width: 100%;
+}
+
+p.title_card{
+    font-family: 20px;
+    color: black;
+    font-weight: bold;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+p.price_card{
+    font-weight: bold;
+    color: green;
+}
+
+.card_body{
+    width: 100%;
+}
+
+p.container{
+    font-size: 14px;
+    color: gray;
+}
+
+.button{
+    outline: none;
+    border: none;
+    background-color: #23ed;
+    color: #fff;
+    padding: 5px 8px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+

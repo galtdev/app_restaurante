@@ -1,20 +1,20 @@
 
-// // DEPENDECIAS
+// DEPENDECIAS
 
-// const express = require('express');
-// const router = express.Router();
-// const upload = require('../middlewares/multer');
+const express = require('express');
+const router = express.Router();
+const upload = require('../middlewares/multer');
 
-// const resp = require('../red/response');
-// const controller = require('../auth/controllerAuth');
+const resp = require('../red/response');
+const controller = require('../auth/controllerAuth');
 
-// // RUTAS PARA EL AUTH
+// RUTAS PARA EL AUTH
 
-// router.post('/login', controller.login);
+router.post('/login', controller.login);
 
 
-// // EXPORTS
+// EXPORTS
 
-// module.exports = router;
+module.exports = router;
 
 

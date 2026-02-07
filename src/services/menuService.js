@@ -10,4 +10,8 @@ function upsertPlatillo(table, data) {
     return db.query(sql, [data, data]);
 }
 
-module.exports = {all, upsertPlatillo}
+function delet(table, data){
+    return db.query(`DELETE FROM ${table} WHERE id = ?`, [data.id]);
+}
+
+module.exports = {all, upsertPlatillo, delet}

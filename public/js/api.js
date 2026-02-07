@@ -23,7 +23,12 @@ regPlatillo.addEventListener('submit', async (e) => {
         const result = await response.json();
         const msj = result.body.msj;
 
-        if (response.ok) mensaje.innerText = msj;
+        if (response.ok) {
+            mensaje.innerText = msj;
+            setTimeout(() => {
+                mensaje.innerText = '';
+            }, 1500);
+        }
         else {
             mensaje.style.color = "#d93025";
             mensaje.innerText = "error al enviar";

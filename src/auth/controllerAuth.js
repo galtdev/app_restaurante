@@ -20,9 +20,13 @@ async function login(req, res, next) {
 
         if(comparePass){
             
-            const token = auth.generateToken({...usuarioLog})
+            const dataToken = auth.generateToken({
+                id: usuarioLog.id,
+                correo: usuarioLog.correo,
+                rol: usuarioLog.rol
+            })
 
-            resp.success(req, res, {token: token}, 200);
+            resp.success(req, res, {token: dataToken}, 200);
         }else throw new Error("Informacion invalida");
         
 
@@ -37,17 +41,11 @@ async function create(data){
     try{
 
         const authData = {
-            id: data.id,
+            id: data.id
         }
 
-        if(data.correo){
-            authData.correo = data.correo
-        }
-
-        if(data.password){
-            authData.password = await bcrypt.hash(data.password.toString(), 5);
-        }
-
+        if(data.correo) authData.correo = data.correo
+        if(data.password) authData.password = await bcrypt.hash(data.password.toString(), 5);
 
         return await db.save(TABLA, authData);   
             

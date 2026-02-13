@@ -2,8 +2,36 @@ const card = document.querySelector('.container_card');
 
 async function showTarget(){
     try{
-        const response = await fetch('/api/menu');
+
+
+        const token = localStorage.getItem('token');
+
+        // Opcional: Si quieres que ni siquiera intente pedir datos sin token
+        if (!token) {
+            console.warn("No hay token disponible");
+            card.innerHTML = "<p>Por favor, inicia sesión para ver el menú.</p>";
+            return;
+        }
+
+        
+        const response = await fetch('/api/menu', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`, // AQUÍ enviamos el token
+                'Content-Type': 'application/json'
+            }
+        });
+
+
+        if (response.status === 401 || response.status === 403) {
+            localStorage.removeItem('token'); 
+            window.location.href = '/login.html'; 
+            return;
+        }
+
         const result = await response.json();
+
+        console.log(result)
 
         const data = result.body;
 

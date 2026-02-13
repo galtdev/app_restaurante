@@ -8,8 +8,8 @@ const app = express();
 
 // redir routers
 
-// const users = require('./routes/userRutas');
-// const auth = require('./routes/authRouter');
+const users = require('./routes/userRutas');
+const auth = require('./routes/authRouter');
 const menu = require('./routes/menuRouter');
 
 
@@ -25,8 +25,8 @@ app.use(express.static(path.join(__dirname, '..', 'public')));
 
 
 // rutas API (auth)
-// app.use('/api/user', users);
-// app.use('/api/auth', auth);
+app.use('/api/user', users);
+app.use('/api/auth', auth);
 app.use('/api/menu', menu);
 
 

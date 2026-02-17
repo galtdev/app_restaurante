@@ -1,59 +1,55 @@
-const db = require('../services/userService');
-const dbauth = require('../services/authService');
-const resp = require('../red/response');
-const bcrypt = require('bcrypt');
-const auth = require('../auth/index');
-const express = require('express');
-
-const TABLA = 'auth';
-
+import * as db from '../services/userService.js';
+import * as dbauth from '../services/authService.js';
+import * as resp from '../red/response.js';
+import bcrypt from 'bcrypt';
+import auth from '../auth/index.js';
 
 async function login(req, res, next) {
     try {
+        const { correo, password } = req.body;
+        const usuarioLog = await dbauth.query({ correo: correo });
 
-        const {correo, password} = req.body;
-        const usuarioLog = await dbauth.query(TABLA, {correo: correo});
+        if (!usuarioLog) return next(new Error("informacion invalida"));
 
-        if(!usuarioLog) return next(new Error("informacion invalida"));
+        const comparePass = await bcrypt.compare(password, usuarioLog.password);
 
-        const comparePass = await bcrypt.compare(password, usuarioLog.password)
-
-        if(comparePass){
-            
+        if (comparePass) {
             const dataToken = auth.generateToken({
                 id: usuarioLog.id,
                 correo: usuarioLog.correo,
                 rol: usuarioLog.rol
-            })
+            });
 
-            resp.success(req, res, {token: dataToken}, 200);
-        }else throw new Error("Informacion invalida");
-        
+            resp.success(req, res, { token: dataToken }, 200);
+        } else {
+            throw new Error("Informacion invalida");
+        }
 
     } catch (err) {
         next(err);
     }
 }
 
-
-
-async function create(data){
-    try{
-
+async function create(data) {
+    try {
         const authData = {
-            id: data.id
+            id: data.id,
+            correo: data.correo,
+            rol: 'admin' 
+        };
+        
+        if (data.password) {
+            authData.password = await bcrypt.hash(data.password.toString(), 5);
         }
 
-        if(data.correo) authData.correo = data.correo
-        if(data.password) authData.password = await bcrypt.hash(data.password.toString(), 5);
-
-        return await db.save(TABLA, authData);   
+        return await dbauth.saveAuth(authData);   
             
-    } catch (err){
+    } catch (err) {
         throw err;
     }
 }
 
-
-
-module.exports = {create, login}
+export {
+    create,
+    login
+};

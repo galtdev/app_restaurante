@@ -1,12 +1,12 @@
 
 // DEPENDECIAS
 
-const express = require('express');
-const router = express.Router();
-const upload = require('../middlewares/multer');
+import express from 'express';
+import security from '../middlewares/securityActions.js'
+import * as controller from '../auth/controllerAuth.js';
 
-const resp = require('../red/response');
-const controller = require('../auth/controllerAuth');
+
+const router = express.Router();
 
 // RUTAS PARA EL AUTH
 
@@ -15,6 +15,6 @@ router.post('/login', controller.login);
 
 // EXPORTS
 
-module.exports = router;
+export default router;
 
 

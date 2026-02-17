@@ -1,11 +1,13 @@
-const respuesta = require("./response");
+import respuesta from "./response.js";
 
-function errors(err, req, res, next){
+function errors(err, req, res, next) {
     console.error('[error]', err);
-    const mensaje = err.message || 'error interno';
+
+    const mensaje = err.message || 'Error interno';
     const status = err.statusCode || 500;
 
+    // Ahora respuesta.error funcionará porque 'respuesta' es el objeto default
     respuesta.error(req, res, mensaje, status);
 }
 
-module.exports = errors
+export default errors;

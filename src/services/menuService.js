@@ -1,17 +1,42 @@
-const db = require('../database/mysql');
+
+import prisma from '../config/prisma.js';
 
 
-function all(table){
-    return db.query(`SELECT * FROM ${table}`);
+export async function all(){
+    return await prisma.platillo.findMany({
+        orderBy: {
+            nombre_platillo: 'asc'
+        }
+    });
 }
 
-function upsertPlatillo(table, data) {
-    const sql = `INSERT INTO ${table} SET ? ON DUPLICATE KEY UPDATE ?`;
-    return db.query(sql, [data, data]);
+export async function upsertPlatillo(data) {
+    
+    const platillo = {
+        nombre_platillo: data.nombre_platillo,
+        precio: Number(data.precio),
+        contenido: data.contenido,
+        status: data.status ?? 1
+    }
+
+    const idSearch = data.id ? Number(data.id) : 0;
+
+    return await prisma.platillo.upsert({
+        where: { id: idSearch },
+        update: platillo,
+        create: platillo
+    });
+
 }
 
-function delet(table, data){
-    return db.query(`DELETE FROM ${table} WHERE id = ?`, [data.id]);
+
+export async function delet(table, data){
+
+    const idBorrar = Number(id);
+
+    return await prisma.platillo.delete({
+        where: { id: idBorrar }
+    })
+    
 }
 
-module.exports = {all, upsertPlatillo, delet}

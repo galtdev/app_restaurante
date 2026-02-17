@@ -1,38 +1,26 @@
-const db = require('../services/menuService');
-const resp = require('../red/response')
-const express = require('express');
+import * as service from '../services/menuService.js';
+import * as resp from '../red/response.js';
+import express from 'express';
 
-const auth = require('../auth/controllerAuth')
 
-const TABLA = 'platillo';
-
-async function store(req, res, next) {
+export async function store(req, res, next) {
     try {
-        const items = await db.all(TABLA);
+        const items = await service.all();
         resp.success(req, res, items, 200);
     } catch (err) {
         next(err);
     }
 }
 
-async function create(req, res, next){
+export async function create(req, res, next){
     try{
         const datos = req.body;
 
-        const insertId = (datos.id == 0) ? null : datos.id;
-
-        const platillo = {
-            id: insertId, 
-            nombre_platillo: datos.nombre_platillo,
-            precio: datos.precio,
-            contenido: datos.contenido
-        }
-
-        const item = await db.upsertPlatillo(TABLA, platillo);
+        const item = await service.upsertPlatillo(datos);
 
         const dataView = {
             msj: "datos enviados correctamente",
-            data: platillo
+            data: item
         }
 
         resp.success(req, res, dataView, 201);
@@ -44,13 +32,15 @@ async function create(req, res, next){
 
 
 
-async function update(req, res, next){
+export async function update(req, res, next){
     try{
-        const items = await db.upsertPlatillo(TABLA, req.body);       
+        const items = await service.upsertPlatillo(req.body);    
+
         const data = { 
             msj: 'registro actualizado con exito',
             data: items
         }
+
         resp.success(req, res, data, 201);       
     } catch (err){
         next(err);
@@ -58,16 +48,21 @@ async function update(req, res, next){
 }
 
 
-async function delet(req, res, next){
+export async function delet(req, res, next){
     try{
-        const item = await db.delet(TABLA, req.body);
+        const item = await service.delet(req.body.id);
 
-        if(item.affectedRows > 0) resp.success(req, res, 'Eliminado Satisfactoriamete', 200)
-        else resp.error(req, res, 'No se encontro el dato', 404);
+        datos = {
+            msj: "registro eliminado",
+            data: item
+        }
+
+        resp.success(req, res, datos , 200)
+        
+    
     } catch (err){
         next(err);
     }
 }
 
-module.exports = {store, create, update, delet}
 

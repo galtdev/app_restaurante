@@ -1,9 +1,8 @@
-require('dotenv').config();
+import 'dotenv/config';
 
-
-module.exports = {
+const config = {
     app: {
-        port: process.env.PORT,
+        port: process.env.PORT || 3000,
     },
 
     jwt: {
@@ -16,4 +15,6 @@ module.exports = {
         password: process.env.MYSQL_PASSWORD || 'clave',
         database: process.env.MYSQL_DB || 'restaurante'
     }
-}
+};
+
+export default config;

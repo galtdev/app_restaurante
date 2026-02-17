@@ -1,12 +1,14 @@
-const express = require('express');
-const router = express.Router();
-const upload = require('../middlewares/multer');
+import express from 'express';
+import upload from '../middlewares/multer.js';
+import security from'../middlewares/securityActions.js';
 
-const security = require('../middlewares/securityActions');
-const resp = require('../red/response');
-const controller = require('../controllers/menuController');
+import * as controller from '../controllers/menuController.js';
+
+
+const router = express.Router();
+
 
 router.get('/', security.isLogged(), controller.store);
 router.post('/', controller.create);
 
-module.exports = router;
+export default router;

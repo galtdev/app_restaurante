@@ -1,22 +1,18 @@
 // DEPENDENCIAS
 
 
-const express = require('express');
+import express from 'express';
+import security from '../middlewares/securityActions.js';
+import resp from '../red/response.js';
+import * as controller from '../controllers/userController.js';
+
 const router = express.Router();
-const upload = require('../middlewares/multer');
-
-const security = require('../middlewares/securityActions');
-const resp = require('../red/response');
-const controller = require('../controllers/userController');
-
 
 // RUTAS PARA EL REG AUTH
-
 router.get('/', controller.all);
 router.post('/', controller.create);
 router.post('/update', controller.update);
 router.get('/:id', controller.one);
-router.put('/', controller.delet);
+router.delete('/:id', controller.delet);
 
-
-module.exports = router;
+export default router;

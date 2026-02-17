@@ -1,22 +1,34 @@
-const db = require('../database/mysql');
+import prisma from '../config/prisma.js';
 
-
-function all(table){
-    return db.query(`SELECT * FROM ${table}`);
+export async function all() {
+    return await prisma.usuario.findMany();
 }
 
-function one(table, id){
-    return db.query(`SELECT * FROM ${table} WHERE id = ?`, [id]);
+export async function one(id) {
+    return await prisma.usuario.findUnique({
+        where: { id: Number(id) } // Number es un poco más limpio que parseInt
+    });
 }
 
-function save(table, data) {
-    const sql = `INSERT INTO ${table} SET ? ON DUPLICATE KEY UPDATE ?`;
-    return db.query(sql, [data, data]);
+export async function save(data) {
+    // Extraemos el id y el resto de los campos por separado
+    const { id, ...rest } = data;
+
+    if (id) {
+        return await prisma.usuario.update({
+            where: { id: Number(id) },
+            data: rest 
+        });
+    } else {
+        return await prisma.usuario.create({
+            data: rest
+        });
+    }
 }
 
-
-function delet(table, data){
-    return db.query(`DELETE FROM ${table} WHERE id = ?`, [data.id]);
+export async function delet(id) {
+    return await prisma.usuario.delete({
+        where: { id: Number(id) }
+    });
 }
 
-module.exports = {all, one, delet, save}

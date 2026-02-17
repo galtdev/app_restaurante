@@ -1,18 +1,28 @@
-const db = require('../database/mysql');
+import prisma from '../config/prisma.js';
 
-
-async function query(table, consulta) {
-  
-    const sql = `SELECT * FROM ${table} WHERE ?`;
-
+export async function query(consulta) {
     try {
-        const res = await db.query(sql, consulta);
-        
-        return res.length > 0 ? res[0] : null;
+        return await prisma.auth.findFirst({ where: consulta });       
     } catch (error) {
-        console.error("Error en authService:", error);
-        throw error;
+        console.error("Error en authService query:", error);
+        return null; 
     }
 }
 
-module.exports = { query };
+// NUEVA: Para guardar específicamente en la tabla Auth
+export async function saveAuth(data) {
+    return await prisma.auth.upsert({
+        where: { id: Number(data.id) },
+        update: {
+            correo: data.correo,
+            password: data.password,
+            rol: data.rol || 'admin'
+        },
+        create: {
+            id: Number(data.id),
+            correo: data.correo,
+            password: data.password,
+            rol: data.rol || 'admin'
+        }
+    });
+}

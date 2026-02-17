@@ -9,4 +9,4 @@ function error (mensaje, code){
 }
 
 
-module.exports = {error}
+export default error;

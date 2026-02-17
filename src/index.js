@@ -1,6 +1,8 @@
-const app = require('./app')
+import 'dotenv/config'; 
+import app from './app.js';
 
+const PORT = app.get('port');
 
-app.listen(app.get('port'), ()=> {
-    console.log("servidor en puerto", app.get("port"))
-})
+app.listen(PORT, () => {
+    console.log(`Servidor en puerto ${PORT}`);
+});

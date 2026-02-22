@@ -1,0 +1,131 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// USUARIOS Y SEGURIDAD
+
+model Usuario {
+  id     Int    @id @default(autoincrement())
+  nombre String @unique
+  status Int?
+  auth   Auth?
+  cajas Caja[]
+  cocinas Cocina[]
+
+  @@map("usuarios")
+}
+
+model Auth {
+  id       Int     @id
+  correo   String  @unique
+  password String
+  rol      String?
+  usuario  Usuario @relation(fields: [id], references: [id], onDelete: Cascade)
+
+  @@map("auth")
+}
+
+
+// MODELOS OPERATIVOS
+
+model Caja {
+  id Int @id @default(autoincrement())
+  usuarioId Int 
+  usuario Usuario @relation(fields: [usuarioId], references: [id])
+  pedidos Pedido[]
+
+  @@map("caja")
+  
+}
+
+model Cocina {
+  id Int @id @default(autoincrement())
+  usuarioId Int 
+  usuario Usuario @relation(fields: [usuarioId], references: [id])
+  detalles DetallePedido[]
+
+  @@map("cocina")
+}
+
+// MODELO DEL PROCESO DE VENTAS
+
+model Cliente {
+  id Int @id @default(autoincrement())
+  cedula String @unique
+  nombre String
+  telefono String
+
+  pedidos Pedido[]
+
+  @@map("cliente")
+}
+
+model Pedido {
+  id Int @id @default(autoincrement())
+  mesa String 
+  tipo_pedido String
+  status String
+  status_pago String 
+
+  clienteId Int 
+  cliente Cliente @relation(fields: [clienteId], references: [id])
+
+  cajaId Int 
+  caja Caja @relation(fields: [cajaId], references: [id])
+
+  pago Pago[]
+  detalles DetallePedido[]
+
+  @@map("pedido")
+
+}
+
+model DetallePedido {
+  id Int @id @default(autoincrement())
+  nombre_platillo String
+  precio Int
+  status String
+
+  platilloId Int
+  platillo Platillo @relation(fields: [platilloId], references: [id])
+
+  cocinaId Int 
+  cocina Cocina @relation(fields: [cocinaId], references: [id])
+
+  pedidoId Int 
+  pedido Pedido @relation(fields: [pedidoId], references: [id])
+
+  @@map("detalle_pedido")
+
+}
+
+model Pago {
+  id Int @id @default(autoincrement())
+  monto Int 
+  metodo_pago String
+  referencia String 
+
+  pedidoId Int
+  pedido Pedido @relation(fields: [pedidoId], references: [id])
+
+  @@map("pago")
+}
+
+// CATALOGO
+
+model Platillo {
+  id              Int     @id @default(autoincrement())
+  nombre_platillo String
+  precio          Int
+  contenido       String
+  status          Int @default(1)
+
+  detalles DetallePedido[]
+
+  @@map("platillo")
+}

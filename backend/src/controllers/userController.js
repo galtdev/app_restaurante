@@ -26,21 +26,16 @@ async function one(req, res, next) {
 
 async function create(req, res, next) {
     try {
-        // 1. Extraemos correo, password y rol (campos de la tabla AUTH)
-        // El resto (nombre, status) se queda en 'datosUsuario'
+    
         const { correo, password, rol, ...datosUsuario } = req.body;
-
-        // 2. Guardamos en la tabla 'usuarios' (userService)
-        // Esto ahora solo enviará 'nombre' y 'status'
         const userSave = await db.save(datosUsuario);   
         
-        // 3. Creamos la entrada en la tabla 'auth' usando el ID generado
         if (correo || password) {
             await auth.create({
                 id: userSave.id,
                 correo: correo,
                 password: password,
-                rol: rol || 'user' // Asignamos un rol por defecto si no viene
+                rol: rol 
             });
         }
 

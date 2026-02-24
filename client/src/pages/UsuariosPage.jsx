@@ -1,4 +1,10 @@
 import DataTable from '../components/Table.jsx';
+import DynamicForm from '../components/Form.jsx';
+import Button from '../components/Button.jsx';
+import Modal from '../components/Modal.jsx';
+import Notification from '../components/Notification.jsx';
+import {api} from '../services/api.js'
+import {camposUsuario} from '../config/formConfig.js'
 import { usuariosColumns } from '../config/tableConfig.js';
 import { useState, useEffect} from 'react';
 
@@ -6,35 +12,84 @@ export default function UsuariosPage() {
 
   const [usuarios, setUsuarios] = useState([]);
   const [cargando, setCargando] = useState(true);
+  const [notification, setNotification] = useState({ text: '', type: '', target: '' });
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const constulHttp = async ()=> {
-    try{
-      const response = await fetch('/api/user');
-      const data = await response.json();
-
-      setUsuarios(data.body);
+  const handleClearMessage = () => {
+    setNotification({ text: '', type: '' });
+  };
 
 
-    }catch(error){
-      console.error("error al atraer usuarios", error);
-    }finally{
-      setCargando(false);
+  const consultarHttp = async ()=> {
+    const res = await api.get(`/api/user`);
+    setCargando(false);
+    setUsuarios(res.data.body);
+  };
+
+  
+  const guardarUsuario = async (data) => {
+    const res = await api.post(`/api/user`, data);
+    if(!res.error){
+      setNotification({text: 'Usuario Registrado', type: 'success', target: 'form'});
+      consultarHttp();
     }
   };
 
+
+  const eliminarUsuario = async (id) => {
+
+  const res = await api.delete(`/api/user/${id}`);
+
+  if (!res.error) {
+    setNotification({ text: 'Usuario eliminado correctamente', type: 'advertencia', target: 'page' });
+    consultarHttp();
+  } 
+};
+
+
   useEffect(() => {
-    constulHttp();
+    consultarHttp();
   }, []);
 
-  return (
-    <div>
-      <h1>Gestión de Usuarios</h1>
-      
-      {cargando ? (<p>cargando datos</p>
-    ) : ( 
-    <DataTable columns={usuariosColumns} data={usuarios} />
-    )}
 
+
+  return (
+    <div className="page-content">
+      <Button variant='primary' onClick={()=> setIsModalOpen(true)}>
+        + Nuevo Usuario
+      </Button>
+      <Modal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)}
+        title="Gestión de Usuarios"
+      >
+        <DynamicForm 
+          subtitle="Registra un nuevo usuario en la base de datos"
+          fields={camposUsuario} 
+          onSubmit={guardarUsuario} 
+          message={notification}
+          clearMessage={handleClearMessage}
+        />
+      </Modal>
+
+      <div style={{ marginTop: '40px' }}>
+        <h2>Lista de Usuarios</h2>
+        {cargando ? (
+          <p>cargando datos...</p>
+        ) : ( 
+          <DataTable columns={usuariosColumns} data={usuarios} onDelete={eliminarUsuario}/>
+        )}
+      </div>
+     {notification.text && (
+        <div style={{ marginTop: '20px' }}>
+          <Notification 
+            text={notification.text}   // Pasamos el string, no el objeto
+            type={notification.type}   // 'success' o 'error'
+            onClose={handleClearMessage} 
+            target='page'
+          />
+        </div>
+      )}
     </div>
   );
 }

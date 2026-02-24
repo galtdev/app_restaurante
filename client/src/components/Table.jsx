@@ -1,4 +1,5 @@
 
+import Button from './Button';
 import '../styles/table.css';
 
 const getValue = (obj, path) => {
@@ -6,7 +7,10 @@ const getValue = (obj, path) => {
   return path.split('.').reduce((acc, part) => acc && acc[part], obj);
 };
 
-export default function DataTable({ columns, data }) {
+export default function DataTable({ columns, data, onDelete }) {
+
+  if (!data) return <p>No hay datos disponibles</p>
+
   return (
     <div className="table-container">
       <table className="custom-table">
@@ -25,7 +29,9 @@ export default function DataTable({ columns, data }) {
                 <td key={index}>{getValue(item, col.key) || "N/A,"}</td>
               ))}
               <td>
-                <button className="btn-edit">Editar</button>
+                <Button type="submit" variant="danger" onClick={() => onDelete(item.id)}>
+                    elimimar
+                </Button>
               </td>
             </tr>
           ))}

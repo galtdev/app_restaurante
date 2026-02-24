@@ -35,7 +35,7 @@ async function create(data) {
         const authData = {
             id: data.id,
             correo: data.correo,
-            rol: 'admin' 
+            rol: data.rol 
         };
         
         if (data.password) {

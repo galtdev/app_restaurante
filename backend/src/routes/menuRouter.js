@@ -8,7 +8,8 @@ import * as controller from '../controllers/menuController.js';
 const router = express.Router();
 
 
-router.get('/', security.isLogged(), controller.store);
-router.post('/', controller.create);
+router.get('/', controller.store);
+router.post('/',upload.single('imagen'), controller.create);
+router.delete('/:id', controller.delet);
 
 export default router;

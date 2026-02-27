@@ -38,9 +38,9 @@ export default function UsuariosPage() {
 
   const eliminarUsuario = async (id) => {
 
-  const res = await api.delete(`/api/user/${id}`);
+  const {error} = await api.delete(`/api/user/${id}`);
 
-  if (!res.error) {
+  if (!error) {
     setNotification({ text: 'Usuario eliminado correctamente', type: 'advertencia', target: 'page' });
     consultarHttp();
   } 
@@ -69,6 +69,7 @@ export default function UsuariosPage() {
           onSubmit={guardarUsuario} 
           message={notification}
           clearMessage={handleClearMessage}
+
         />
       </Modal>
 
@@ -83,8 +84,8 @@ export default function UsuariosPage() {
      {notification.text && (
         <div style={{ marginTop: '20px' }}>
           <Notification 
-            text={notification.text}   // Pasamos el string, no el objeto
-            type={notification.type}   // 'success' o 'error'
+            text={notification.text}   
+            type={notification.type}   
             onClose={handleClearMessage} 
             target='page'
           />

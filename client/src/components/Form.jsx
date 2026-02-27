@@ -13,8 +13,7 @@ export default function DynamicForm({ fields, onSubmit, title, subtitle, message
 
   const [formData, setFormData] = useState(initialState);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
+  const handleChange = (name, value) => {
     setFormData({ ...formData, [name]: value });
   };
 
@@ -38,13 +37,15 @@ export default function DynamicForm({ fields, onSubmit, title, subtitle, message
               type={field.type || "text"}
               id={field.name}
               name={field.name}
-              value={formData[field.name]}
-              onChange={handleChange}
               placeholder={field.placeholder}
               required={field.required}
+              {...(field.type !== 'file' ? { value: formData[field.name] || '' } : {})}
+              onChange={(e) => {
+                const val = field.type === 'file' ? e.target.files[0] : e.target.value;
+                handleChange(field.name, val);
+              }}
             />
           </div>
-          
         ))}
         
         <Button type="submit" variant="primary">

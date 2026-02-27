@@ -123,7 +123,8 @@ model Platillo {
   nombre_platillo String
   precio          Int
   contenido       String
-  status          Int @default(1)
+  status          String 
+  imagen String?
 
   detalles DetallePedido[]
 

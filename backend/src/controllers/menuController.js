@@ -14,16 +14,17 @@ export async function store(req, res, next) {
 
 export async function create(req, res, next){
     try{
-        const datos = req.body;
+        const dataBody = req.body;
+        const nameFile = req.file ? req.file.filename : null;
 
-        const item = await service.upsertPlatillo(datos);
-
-        const dataView = {
-            msj: "datos enviados correctamente",
-            data: item
+        const finalData = {
+            ...dataBody,
+            imagen: nameFile
         }
 
-        resp.success(req, res, dataView, 201);
+        const item = await service.upsertPlatillo(finalData);
+
+        resp.success(req, res, "datos enviandos", 201);
 
     }catch(err){
         next(err);
@@ -34,7 +35,15 @@ export async function create(req, res, next){
 
 export async function update(req, res, next){
     try{
-        const items = await service.upsertPlatillo(req.body);    
+
+        const dataBody = req.body;
+        const nameFile = req.file ? req.file.filename : null;
+
+        const dataUpdate = { ...dataBody }
+
+        if(nameFile) {dataUpdate.imagen = nameFile}
+
+        const items = await service.upsertPlatillo(dataUpdate);    
 
         const data = { 
             msj: 'registro actualizado con exito',
@@ -50,14 +59,13 @@ export async function update(req, res, next){
 
 export async function delet(req, res, next){
     try{
-        const item = await service.delet(req.body.id);
 
-        datos = {
-            msj: "registro eliminado",
-            data: item
-        }
+        const {id} = req.params;
 
-        resp.success(req, res, datos , 200)
+        const item = await service.delet(id);
+
+
+        resp.success(req, res, 'registro eliminado', 200)
         
     
     } catch (err){

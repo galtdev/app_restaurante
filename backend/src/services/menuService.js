@@ -16,7 +16,8 @@ export async function upsertPlatillo(data) {
         nombre_platillo: data.nombre_platillo,
         precio: Number(data.precio),
         contenido: data.contenido,
-        status: data.status ?? 1
+        status: data.status ?? "activo",
+        imagen: data.imagen
     }
 
     const idSearch = data.id ? Number(data.id) : 0;
@@ -30,7 +31,7 @@ export async function upsertPlatillo(data) {
 }
 
 
-export async function delet(table, data){
+export async function delet(id){
 
     const idBorrar = Number(id);
 

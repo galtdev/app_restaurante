@@ -9,9 +9,8 @@ export default function Sidebar(){
                 <NavLink to="/admin/dashboard" className="sidebar-link">dashboard</NavLink>
                 <NavLink to="/admin/usuarios" className="sidebar-link">Usuarios</NavLink>
                 <NavLink to="/admin/menu" className="sidebar-link">Menu</NavLink>
-                <NavLink className="sidebar-link">Caja</NavLink>
-                <NavLink className="sidebar-link">Cocina</NavLink>
-              
+                <NavLink to="/admin/caja" className="sidebar-link">Caja</NavLink>
+                <NavLink className="sidebar-link">Cocina</NavLink>            
             </nav>
         </aside>
     )

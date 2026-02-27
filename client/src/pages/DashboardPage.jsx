@@ -1,5 +1,4 @@
 import DataTable from '../components/Table.jsx';
-import { menuColums, menuData } from '../config/tableConfig.js';
 import Card from '../components/Card.jsx';
 import ProductCard from '../components/MenuCard.jsx';
 import Button from '../components/Button.jsx'; // Asegúrate de tenerlo importado

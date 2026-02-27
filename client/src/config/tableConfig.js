@@ -7,12 +7,9 @@ export const usuariosColumns = [
 ];
 
 export const menuColums = [
-  { label: 'Plato', key: 'plato' },
-  { label: 'Descripcion', key: 'descripcion' },
-  { label: 'Estado', key: 'estado' }
+  { label: 'Plato', key: 'nombre_platillo' },
+  { label: 'Contenido', key: 'contenido' },
+  { label: 'Precio', key: 'precio' },
+  { label: 'Estado', key: 'status' }
 ];
 
-export const menuData = [
-  { id: 1, plato: 'Comida 1', descripcion: 'descripcion 1', estado: 'Disponible' },
-  { id: 2, plato: 'Comida 2', descripcion: 'descripcion 2', estado: 'No Disponible' },
-];

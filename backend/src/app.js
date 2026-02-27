@@ -26,6 +26,7 @@ app.use(express.urlencoded({ extended: true }));
 // Configuración y archivos estáticos
 app.set('port', config.app.port);
 app.use(express.static(path.join(__dirname, '..', '..', 'client', 'public')));
+app.use('/public', express.static(path.join(__dirname, 'storage', 'img')));
 
 // Rutas API
 app.use('/api/user', users);

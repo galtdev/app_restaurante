@@ -1,13 +1,12 @@
-import DataTable from '../components/Table.jsx';
-import { menuColums} from '../config/tableConfig.js';
 
+import { menuColums} from '../config/tableConfig.js';
 import {api} from '../services/api.js';
+import { camposMenu, camposEditMenu } from '../config/formConfig.js';
 import { useState, useEffect } from 'react';
 
 import Modal from '../components/Modal.jsx';
-
+import DataTable from '../components/Table.jsx';
 import DynamicForm from '../components/Form.jsx';
-import { camposMenu } from '../config/formConfig.js';
 import Notification from '../components/Notification.jsx';
 import ProductCard from '../components/MenuCard.jsx';
 import Button from '../components/Button.jsx'; 
@@ -20,10 +19,19 @@ export default function MenuPage() {
   const [platos, setPlatos] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [notification, setNotification] = useState({ text: '', type: '', target: '' });
+  const [editPlato, setEditPlato] = useState(null);
+
 
   const handleClearMessage = () => {
     setNotification({ text: '', type: '', target: '' });
   }
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
+    setEditPlato(null);
+    // handleClearMessage();
+  }
+
 
 
   const consultPlatos = async () => {
@@ -31,21 +39,28 @@ export default function MenuPage() {
     setPlatos(data.body);
   }
 
-  const registrarPlato = async (dataForm)=> {
 
-    const formData = new FormData();
 
-    Object.keys(dataForm).forEach(key => {
-      formData.append(key, dataForm[key]);
-    })
-    
-    const resp = await api.post('/api/menu', formData);
+  const registrarPlato = async (dataForm) => {
 
-    if(!resp.error) {
-      setNotification({ text: 'Plato registrado', type: 'success', target: 'form' });
-      consultPlatos();
-    }
+
+  const formData = new FormData();
+
+  if (editPlato && editPlato.id)  formData.append('id', editPlato.id);
+
+  Object.keys(dataForm).forEach(key => {
+    if (key !== 'id')  formData.append(key, dataForm[key]);
+  });
+  
+  const resp = await api.post('/api/menu', formData);
+
+  if (!resp.error) {
+   
+    const mensaje = editPlato ? 'Plato actualizado correctamente' : 'Plato registrado';
+    setNotification({ text: mensaje, type: 'success', target: 'form' });
+    consultPlatos();
   }
+};
 
   const eliminarPlato = async (id)=>{
 
@@ -71,13 +86,14 @@ export default function MenuPage() {
 
       <Modal
         isOpen={openModal}
-        onClose={() => setOpenModal(false)}
+        onClose={handleCloseModal}
         title={"Agregar platillo"}
       >
 
         <DynamicForm
-          subtitle="Registra un nuevo usuario en la base de datos"
-          fields={camposMenu} 
+          initialData = {editPlato}
+          subtitle={editPlato ? "Modifica datos del plato" : " Registra un nuevo usuario en la base de datos"}
+          fields={editPlato ? camposEditMenu : camposMenu} 
           onSubmit={registrarPlato} 
           message={notification}
           clearMessage={handleClearMessage}
@@ -86,7 +102,10 @@ export default function MenuPage() {
       </Modal>
     
       <div className="table-container">
-        <DataTable columns={menuColums} data={platos} onDelete={eliminarPlato}/>
+        <DataTable columns={menuColums} data={platos} onDelete={eliminarPlato} edit={(item) => {
+          setEditPlato(item);
+          setOpenModal(true);
+        }}/>
       </div>
 
       <div style={{ marginTop: '20px' }}>
@@ -114,8 +133,9 @@ export default function MenuPage() {
             key={data.id} 
             name={data.nombre_platillo} 
             price={data.precio} 
-            category={data.contenido}
-            image={data.imagen ? `/public/${data.imagen}` : "https://via.placeholder.com/200"}
+            contain={data.contenido}
+            category={data.category}
+            image={data.imagen ? `/imagenes/${data.imagen}` : "https://via.placeholder.com/200"}
             onAdd={() => alert(`Agregado: ${data.nombre_platillo}`)}
           />
         ))}

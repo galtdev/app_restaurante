@@ -12,6 +12,13 @@ dist
 dist-ssr
 *.local
 
+.env
+backend/.env
+
+# Ignorar todas las imágenes subidas por usuarios
+backend/src/storage/img/*
+!backend/src/storage/img/.gitkeep
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

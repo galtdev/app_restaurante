@@ -7,7 +7,7 @@ const getValue = (obj, path) => {
   return path.split('.').reduce((acc, part) => acc && acc[part], obj);
 };
 
-export default function DataTable({ columns, data, onDelete }) {
+export default function DataTable({ columns, data, onDelete, edit }) {
 
   if (!data) return <p>No hay datos disponibles</p>
 
@@ -29,6 +29,11 @@ export default function DataTable({ columns, data, onDelete }) {
                 <td key={index}>{getValue(item, col.key) || "N/A,"}</td>
               ))}
               <td>
+
+                <Button type="submit" variant="primary" onClick={() => edit(item)}>
+                    editar
+                </Button>
+
                 <Button type="submit" variant="danger" onClick={() => onDelete(item.id)}>
                     elimimar
                 </Button>

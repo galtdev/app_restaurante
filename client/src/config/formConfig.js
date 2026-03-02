@@ -35,9 +35,12 @@ export const camposEditMenu = [
 ];
 
 
-export const camposPedido = [
+export const camposUsuarioPedido = [
   { name: 'nombre_cliente', label: 'Nombre del cliente', placeholder: 'Ej: Juan Pérez', required: true },
   { name: 'cedula', label: 'Cédula', placeholder: 'Ej: 12345678', required: true },
+  ];
+
+  export const camposPagoPedido = [
   { 
     name: 'metodo_pago', 
     label: 'Método de Pago', 

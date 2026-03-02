@@ -1,5 +1,5 @@
 // 1. GESTIÓN DE USUARIOS
-export const RegistrarUsuario = [
+export const LoginUsuario = [
   { name: 'nombre_usuario', label: 'Nombre de usuario', placeholder: 'Ej: angel osuna', required: true },
   { name: 'password', label: 'Contraseña', type: 'password', placeholder: '••••••••', required: true },
   ];

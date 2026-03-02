@@ -1,4 +1,10 @@
 // 1. GESTIÓN DE USUARIOS
+export const RegistrarUsuario = [
+  { name: 'nombre_usuario', label: 'Nombre de usuario', placeholder: 'Ej: angel osuna', required: true },
+  { name: 'password', label: 'Contraseña', type: 'password', placeholder: '••••••••', required: true },
+  ];
+
+
 export const camposUsuario = [
   { name: 'nombre', label: 'Nombre Completo', placeholder: 'Ej: Galanton', required: true },
   { name: 'correo', label: 'Correo Electrónico', type: 'email', placeholder: 'correo@ejemplo.com', required: true },
@@ -60,3 +66,4 @@ export const camposUsuarioPedido = [
     showIf: { field: 'metodo_pago', value: 'pago_movil' } 
   }
 ];
+

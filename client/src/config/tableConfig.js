@@ -3,7 +3,8 @@ export const usuariosColumns = [
   { label: 'Nombre', key: 'nombre' },
   { label: 'Email', key: 'auth.correo' },
   { label: 'Rol', key: 'auth.rol' },
-  { label: 'Status', key: 'status' }
+  { label: 'Status', key: 'status' },
+  { label: 'Prueba', key: 'prueba' }
 ];
 
 export const menuColums = [

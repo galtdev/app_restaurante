@@ -7,6 +7,7 @@ import { useState, useEffect } from 'react';
 import Modal from '../components/Modal.jsx';
 import DataTable from '../components/Table.jsx';
 import DynamicForm from '../components/Form.jsx';
+import { camposMenu, camposPedido } from '../config/formConfig.js';
 import Notification from '../components/Notification.jsx';
 import ProductCard from '../components/MenuCard.jsx';
 import Button from '../components/Button.jsx'; 
@@ -55,7 +56,7 @@ export default function MenuPage() {
   const resp = await api.post('/api/menu', formData);
 
   if (!resp.error) {
-   
+
     const mensaje = editPlato ? 'Plato actualizado correctamente' : 'Plato registrado';
     setNotification({ text: mensaje, type: 'success', target: 'form' });
     consultPlatos();

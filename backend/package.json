@@ -8,9 +8,9 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-  "dev": "nodemon src/index.js",
-  "start": "node src/index.js"
-},
+    "dev": "nodemon src/index.js",
+    "start": "node src/index.js"
+  },
   "dependencies": {
     "@prisma/adapter-mariadb": "^7.4.0",
     "@prisma/adapter-pg": "^7.4.0",
@@ -33,5 +33,3 @@
     "prisma": "^5.22.0"
   }
 }
-
-

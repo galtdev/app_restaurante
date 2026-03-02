@@ -17,6 +17,7 @@ export async function upsertPlatillo(data) {
         precio: Number(data.precio),
         contenido: data.contenido,
         status: data.status ?? "activo",
+        category: data.category === "" ? "General" : data.category,
         imagen: data.imagen
     }
 

@@ -11,7 +11,7 @@ export default defineConfig({
         changeOrigin: true,
       },
       // Redirige las peticiones de imágenes
-      '/public': {
+      '/imagenes': {
         target: 'http://localhost:3000',
         changeOrigin: true,
       }

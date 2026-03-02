@@ -10,6 +10,7 @@ import error from './red/errors.js';
 import users from './routes/userRutas.js';
 import auth from './routes/authRouter.js';
 import menu from './routes/menuRouter.js';
+import compra from './routes/compraRouter.js';
 
 // --- Configuración de __dirname para ES Modules ---
 const __filename = fileURLToPath(import.meta.url);
@@ -26,12 +27,13 @@ app.use(express.urlencoded({ extended: true }));
 // Configuración y archivos estáticos
 app.set('port', config.app.port);
 app.use(express.static(path.join(__dirname, '..', '..', 'client', 'public')));
-app.use('/public', express.static(path.join(__dirname, 'storage', 'img')));
+app.use('/imagenes', express.static(path.join(__dirname, 'storage', 'img')));
 
 // Rutas API
 app.use('/api/user', users);
 app.use('/api/auth', auth);
 app.use('/api/menu', menu);
+app.use('/api/compra', compra);
 
 // Ruta para la Vista Principal
 app.get('/', (req, res) => {

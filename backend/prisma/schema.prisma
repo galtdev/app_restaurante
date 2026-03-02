@@ -124,6 +124,7 @@ model Platillo {
   precio          Int
   contenido       String
   status          String 
+  category String?
   imagen String?
 
   detalles DetallePedido[]

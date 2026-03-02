@@ -41,9 +41,10 @@ export default function MenuClient() {
           <ProductCard
             key={data.id} 
             name={data.nombre_platillo} 
-            price={data.precio} 
-            category={data.contenido}
-            image="https://via.placeholder.com/200"
+            price={data.precio}
+            contain={data.contenido} 
+            category={data.category}
+            image={data.imagen ? `/imagenes/${data.imagen}` : "https://via.placeholder.com/200"}
             onAdd={() => alert(`Agregado; ${data.nombre_platillo}`)}
         />
         ))}

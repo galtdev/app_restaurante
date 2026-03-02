@@ -34,7 +34,7 @@ function App() {
       {/* Seccion menu cliente */}
 
       <Route path="/menu" element={<MenuClientLayout/>}>
-        <Route path="platos" element={<MenuClient/>} />
+        <Route path="" element={<MenuClient/>} />
       </Route>
 
     </Routes>

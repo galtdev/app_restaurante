@@ -4,7 +4,7 @@ import Button from '../components/Button.jsx';
 import Modal from '../components/Modal.jsx';
 import Notification from '../components/Notification.jsx';
 import {api} from '../services/api.js'
-import {camposUsuario} from '../config/formConfig.js'
+import {camposPedido, camposUsuario} from '../config/formConfig.js'
 import { usuariosColumns } from '../config/tableConfig.js';
 import { useState, useEffect} from 'react';
 

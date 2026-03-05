@@ -2,7 +2,7 @@
 import '../styles/styles.css';
 import Button from './Button';
 
-export default function ProductCard({ name, price, contain, category, image, onAdd }) {
+export default function ProductCard({ name, price, contain, category, image, onAdd, text}) {
   return (
     <div className="product-card">
       <div className="product-image-container">
@@ -19,7 +19,7 @@ export default function ProductCard({ name, price, contain, category, image, onA
         <p className="product-price">${price}</p>
         <p className='product_contain'>{contain}</p>
         <Button variant="primary" onClick={onAdd} className="btn-add">
-          Agregar al pedido
+          {text}
         </Button>
       </div>
     </div>

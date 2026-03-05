@@ -30,7 +30,7 @@ async function login(req, res, next) {
     }
 }
 
-async function create(data) {
+async function create(data, authData) {
     try {
         const authData = {
             id: data.id,

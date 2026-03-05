@@ -7,6 +7,8 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# No subir archivos de configuracion
+
 node_modules
 dist
 dist-ssr
@@ -15,11 +17,10 @@ dist-ssr
 .env
 backend/.env
 
-# Ignorar todas las imágenes subidas por usuarios
+# Ignorar todas las imágenes subidas 
 backend/src/storage/img/*
 !backend/src/storage/img/.gitkeep
 
-# Editor directories and files
 .vscode/*
 !.vscode/extensions.json
 .idea

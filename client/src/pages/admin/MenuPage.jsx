@@ -1,16 +1,16 @@
-import { menuColums} from '../config/tableConfig.js';
-import {api} from '../services/api.js';
+import { menuColums} from '../../config/tableConfig.js';
+import {api} from '../../services/api.js';
 // Limpiamos la importación duplicada aquí:
-import { camposMenu, camposEditMenu, camposPedido } from '../config/formConfig.js';
+import { camposMenu, camposEditMenu, camposPedido } from '../../config/formConfig.js';
 import { useState, useEffect } from 'react';
 
-import Modal from '../components/Modal.jsx';
-import DataTable from '../components/Table.jsx';
-import DynamicForm from '../components/Form.jsx';
-import Notification from '../components/Notification.jsx';
-import ProductCard from '../components/MenuCard.jsx';
-import Button from '../components/Button.jsx'; 
-import '../styles/styles.css';
+import Modal from '../../components/Modal.jsx';
+import DataTable from '../../components/Table.jsx';
+import DynamicForm from '../../components/Form.jsx';
+import Notification from '../../components/Notification.jsx';
+import ProductCard from '../../components/MenuCard.jsx';
+import Button from '../../components/Button.jsx'; 
+import '../../styles/styles.css';
 
 export default function MenuPage() {
 
@@ -121,7 +121,6 @@ export default function MenuPage() {
             contain={data.contenido}
             category={data.category}
             image={data.imagen ? `/imagenes/${data.imagen}` : "https://via.placeholder.com/200"}
-            onAdd={() => alert(`Agregado: ${data.nombre_platillo}`)}
           />
         ))}
       </div>

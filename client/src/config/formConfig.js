@@ -10,8 +10,8 @@ export const camposUsuario = [
     required: true,
     options: [
       { value: 'admin', label: 'Administrador' },
-      { value: 'Caja', label: 'Caja' },
-      { value: 'Cocina', label: 'Cocina' }
+      { value: 'caja', label: 'Caja' },
+      { value: 'cocina', label: 'Cocina' }
     ]
   }
 ];
@@ -35,25 +35,68 @@ export const camposEditMenu = [
 ];
 
 
+
 export const camposPedido = [
-  { name: 'nombre_cliente', label: 'Nombre del cliente', placeholder: 'Ej: Juan Pérez', required: true },
-  { name: 'cedula', label: 'Cédula', placeholder: 'Ej: 12345678', required: true },
   { 
-    name: 'metodo_pago', 
-    label: 'Método de Pago', 
-    type: 'select', 
-    required: true,
-    options: [
-      { value: 'efectivo', label: 'Efectivo' },
-      { value: 'tarjeta', label: 'Tarjeta' },
-      { value: 'pago_movil', label: 'Pago móvil' }
-    ]
+    name: 'nombre_cliente', 
+    label: 'Nombre Completo', 
+    type: 'text', 
+    placeholder: 'Ej. Juan Pérez', 
+    required: true 
   },
   { 
-    name: 'comprobante', 
-    label: 'Imagen del comprobante de pago', 
-    type: 'file',
-    required: true,
-    showIf: { field: 'metodo_pago', value: 'pago_movil' } 
+    name: 'cedula', 
+    label: 'Cédula / ID', 
+    type: 'text', 
+    placeholder: 'Ej. V-12345678', 
+    required: true 
+  },
+  { 
+    name: 'telefono', 
+    label: 'Teléfono de contacto', 
+    type: 'tel', 
+    placeholder: 'Ej. 04125556677', 
+    required: true 
+  },
+  { 
+    name: 'numero_mesa', 
+    label: 'Número de Mesa', 
+    type: 'number', 
+    placeholder: 'Ej. 5', 
+    required: true 
+  },
+  { 
+    name: 'tipo_servicio', 
+    label: '¿Cómo desea su pedido?', 
+    type: 'select', 
+    options: [
+      { value: 'comedor', label: 'Comer en el sitio' },
+      { value: 'llevar', label: 'Para llevar' }
+    ],
+    required: true 
+  }
+];
+
+
+
+export const camposPago = [
+  { 
+    name: 'metodo', 
+    label: 'Método de Pago', 
+    type: 'select', 
+    options: [
+      { value: 'Transferencia', label: 'Transferencia Bancaria' },
+      { value: 'Pago Móvil', label: 'Pago Móvil' },
+      { value: 'Efectivo', label: 'Efectivo (Dólares/Soberanos)' },
+      { value: 'Punto de Venta', label: 'Punto de Venta' }
+    ],
+    required: true 
+  },
+  { 
+    name: 'referencia', 
+    label: 'Número de Referencia', 
+    type: 'text', 
+    placeholder: 'Ej. REF-998877', 
+    required: true 
   }
 ];

@@ -31,12 +31,11 @@ export default function DynamicForm({ fields, onSubmit, title, subtitle, message
         {subtitle && <p>{subtitle}</p>}
         
         {fields.map((field) => {
-          // --- LÓGICA DE VISIBILIDAD CONDICIONAL ---
-          // Si el campo tiene 'showIf', verificamos si debe mostrarse
+          
           if (field.showIf) {
             const valorDelCampoDependiente = formData[field.showIf.field];
             if (valorDelCampoDependiente !== field.showIf.value) {
-              return null; // No renderiza nada si la condición no se cumple
+              return null; 
             }
           }
 
@@ -84,9 +83,11 @@ export default function DynamicForm({ fields, onSubmit, title, subtitle, message
         })}
         
         <div style={{ marginTop: '20px' }}>
-          <Button type="submit" variant="primary">
-            Guardar Registro
-          </Button>
+          {onAdd && (
+            <button onClick={onAdd}>
+              {text || 'Agregar'}
+            </button>
+          )}
         </div>
 
         {/* Notificación de éxito o error */}

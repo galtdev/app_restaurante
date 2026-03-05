@@ -28,7 +28,9 @@ async function create(req, res, next) {
     try {
     
         const { correo, password, rol, ...datosUsuario } = req.body;
-        const userSave = await db.save(datosUsuario);   
+        const authData = (correo || password) ? {correo, password, rol}: null;
+
+        const userSave = await db.save(datosUsuario, authData);   
         
         if (correo || password) {
             await auth.create({

@@ -10,6 +10,12 @@ export async function all(){
     });
 }
 
+export async function one(id){
+    return await prisma.platillo.findUnique({
+        where: {id: Number(id)}
+    })
+}
+
 export async function upsertPlatillo(data) {
     
     const platillo = {

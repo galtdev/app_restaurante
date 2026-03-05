@@ -8,9 +8,8 @@ import error from './red/errors.js';
 
 // Importación de rutas (Asegúrate de que tengan .js)
 import users from './routes/userRutas.js';
-import auth from './routes/authRouter.js';
-import menu from './routes/menuRouter.js';
-import compra from './routes/compraRouter.js';
+import menu from './routes/adminRouter.js';
+import web from './routes/webRouter.js';
 
 // --- Configuración de __dirname para ES Modules ---
 const __filename = fileURLToPath(import.meta.url);
@@ -31,9 +30,10 @@ app.use('/imagenes', express.static(path.join(__dirname, 'storage', 'img')));
 
 // Rutas API
 app.use('/api/user', users);
-app.use('/api/auth', auth);
+app.use('/api/auth', users);
 app.use('/api/menu', menu);
-app.use('/api/compra', compra);
+app.use('/api/pedido', web);
+
 
 // Ruta para la Vista Principal
 app.get('/', (req, res) => {

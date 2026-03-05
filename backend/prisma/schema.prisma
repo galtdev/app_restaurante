@@ -12,7 +12,7 @@ datasource db {
 model Usuario {
   id     Int    @id @default(autoincrement())
   nombre String 
-  status Int?
+  status String?
   auth   Auth?
   cajas Caja[]
   cocinas Cocina[]

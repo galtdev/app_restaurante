@@ -12,6 +12,25 @@ export async function store(req, res, next) {
     }
 }
 
+export async function one(req, res, next){
+    try{
+        const item = await service.one(req.params.id);
+
+        const dataRequest = {
+            id: item.id,
+            nombre_platillo: item.nombre_platillo,
+            precio: item.precio
+        }
+
+        if (item) resp.success(req, res, {msj: "Plato Agregado", dataRequest}, 201);
+        else resp.error(req, res, "Recurso no encontrado", 404);
+    }catch(err){
+        next(err);
+    }
+}
+
+
+
 export async function create(req, res, next){
     try{
         const dataBody = req.body;

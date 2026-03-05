@@ -5,6 +5,7 @@ import express from 'express';
 import security from '../middlewares/securityActions.js';
 import resp from '../red/response.js';
 import * as controller from '../controllers/userController.js';
+import * as controllerAuth from '../auth/controllerAuth.js';
 
 const router = express.Router();
 
@@ -14,5 +15,8 @@ router.post('/', controller.create);
 router.post('/update', controller.update);
 router.get('/:id', controller.one);
 router.delete('/:id', controller.delet);
+
+
+router.post('/login', controllerAuth.login);
 
 export default router;

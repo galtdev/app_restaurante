@@ -1,8 +1,8 @@
-import DataTable from '../components/Table.jsx';
-import Card from '../components/Card.jsx';
-import ProductCard from '../components/MenuCard.jsx';
-import Button from '../components/Button.jsx'; // Asegúrate de tenerlo importado
-import '../styles/styles.css';
+import DataTable from '../../components/Table.jsx';
+import Card from '../../components/Card.jsx';
+import ProductCard from '../../components/MenuCard.jsx';
+import Button from '../../components/Button.jsx'; // Asegúrate de tenerlo importado
+import '../../styles/styles.css';
 
 export default function MenuPage() {
   return (

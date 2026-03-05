@@ -1,4 +1,5 @@
 import prisma from '../config/prisma.js';
+import bcrypt from 'bcrypt';
 
 export async function all() {
     return await prisma.usuario.findMany({
@@ -10,12 +11,14 @@ export async function all() {
 
 export async function one(id) {
     return await prisma.usuario.findUnique({
-        where: { id: Number(id) } // Number es un poco más limpio que parseInt
+        where: { id: Number(id) } 
     });
 }
 
-export async function save(data) {
-    // Extraemos el id y el resto de los campos por separado
+
+
+export async function save(data, authData) {
+    
     const { id, ...rest } = data;
 
     if (id) {
@@ -23,11 +26,41 @@ export async function save(data) {
             where: { id: Number(id) },
             data: rest 
         });
-    } else {
-        return await prisma.usuario.create({
-            data: rest
+    } 
+
+
+    return await prisma.$transaction(async (tx) => {
+
+        let passwordHasheada = null;
+        if (authData && authData.password) {
+            passwordHasheada = await bcrypt.hash(authData.password.toString(), 10);
+        }
+
+        const newUser = await tx.usuario.create({
+            data: {
+                ...rest,
+                auth: authData ? {
+                    create: {
+                        correo: authData.correo,
+                        password: passwordHasheada,
+                        rol: authData.rol
+                    }
+                } : undefined
+            }
         });
-    }
+
+        if (authData?.rol === 'cocina'){
+            await tx.cocina.create({
+                data: {usuarioId : newUser.id}
+            });
+
+        } else if (authData?.rol === 'caja'){
+            await tx.caja.create({
+                data: {usuarioId: newUser.id}
+            });
+        }
+        return newUser;
+    });
 }
 
 

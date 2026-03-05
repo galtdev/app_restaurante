@@ -1,4 +1,10 @@
 // 1. GESTIÓN DE USUARIOS
+export const LoginUsuario = [
+  { name: 'nombre_usuario', label: 'Nombre de usuario', placeholder: 'Ej: angel osuna', required: true },
+  { name: 'password', label: 'Contraseña', type: 'password', placeholder: '••••••••', required: true },
+  ];
+
+
 export const camposUsuario = [
   { name: 'nombre', label: 'Nombre Completo', placeholder: 'Ej: Galanton', required: true },
   { name: 'correo', label: 'Correo Electrónico', type: 'email', placeholder: 'correo@ejemplo.com', required: true },
@@ -37,20 +43,8 @@ export const camposEditMenu = [
 
 
 export const camposPedido = [
-  { 
-    name: 'nombre_cliente', 
-    label: 'Nombre Completo', 
-    type: 'text', 
-    placeholder: 'Ej. Juan Pérez', 
-    required: true 
-  },
-  { 
-    name: 'cedula', 
-    label: 'Cédula / ID', 
-    type: 'text', 
-    placeholder: 'Ej. V-12345678', 
-    required: true 
-  },
+  { name: 'nombre_cliente', label: 'Nombre del cliente', placeholder: 'Ej: Juan Pérez', required: true },
+  { name: 'cedula', label: 'Cédula', placeholder: 'Ej: 12345678', required: true },
   { 
     name: 'telefono', 
     label: 'Teléfono de contacto', 
@@ -100,3 +94,4 @@ export const camposPago = [
     required: true 
   }
 ];
+

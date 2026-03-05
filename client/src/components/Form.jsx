@@ -82,14 +82,12 @@ export default function DynamicForm({ fields, onSubmit, title, subtitle, message
           );
         })}
         
-        <div style={{ marginTop: '20px' }}>
-          {onAdd && (
-            <button onClick={onAdd}>
-              {text || 'Agregar'}
-            </button>
-          )}
-        </div>
-
+              
+      <div style={{ marginTop: '20px' }}>
+        <Button type="submit" variant="primary">
+          Guardar Cambios
+        </Button>
+      </div>
         {/* Notificación de éxito o error */}
         {message && message.text && (
           <Notification 

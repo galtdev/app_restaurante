@@ -121,6 +121,7 @@ export default function MenuPage() {
             contain={data.contenido}
             category={data.category}
             image={data.imagen ? `/imagenes/${data.imagen}` : "https://via.placeholder.com/200"}
+            onAdd={() => alert(`Agregado: ${data.nombre_platillo}`)}
           />
         ))}
       </div>

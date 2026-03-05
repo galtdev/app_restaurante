@@ -43,7 +43,7 @@ export const camposEditMenu = [
 
 
 export const camposPedido = [
-  { name: 'nombre_cliente', label: 'Nombre del cliente', placeholder: 'Ej: Juan Pérez', required: true },
+  { name: 'nombre_cliente', label: 'Nombre del cliente', placeholder: 'Nombre', required: true },
   { name: 'cedula', label: 'Cédula', placeholder: 'Ej: 12345678', required: true },
   { 
     name: 'telefono', 

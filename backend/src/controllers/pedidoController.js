@@ -68,3 +68,16 @@ export async function terminarComanda(req, res, next) {
         resp.error(req, res, "No se pudo finalizar la comanda en cocina", 500);
     }
 }
+
+
+// controllers/pedidoController.js
+export async function obtenerMetricasDashboard(req, res, next) {
+    try {
+        const metrics = await pedidoService.consultarMetricasDashboard();
+        resp.success(req, res, metrics, 200);
+    } catch (err) {
+        // ESTO ES CLAVE: Imprime el error exacto de Prisma en tu terminal
+        console.log("MENSAJE DE PRISMA:", err.message); 
+        resp.error(req, res, err.message, 500); 
+    }
+}

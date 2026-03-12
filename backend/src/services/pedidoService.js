@@ -148,3 +148,52 @@ export async function finalizarPreparacion(pedidoId) {
         return detallesActualizados;
     });
 }
+
+export async function consultarMetricasDashboard() {
+    try {
+        const inicioHoy = new Date();
+        inicioHoy.setHours(0, 0, 0, 0);
+
+        // 1. Ejecutamos los conteos (Caja, Cocina y Menú)
+        const [enCaja, enCocina, totalPlatillos] = await Promise.all([
+            prisma.pedido.count({
+                where: { status_pago: { in: ["PENDIENTE", "POR_VERIFICAR"] } }
+            }),
+            prisma.detallePedido.count({
+                where: { status: "EN_PREPARACION" }
+            }),
+            prisma.platillo.count(),
+        ]);
+
+        // 2. RECAUDACIÓN: Sumamos los platos marcados como COMPLETADO hoy
+        // Buscamos los detalles que cambiaron a COMPLETADO y sumamos su precio
+        const platosTerminados = await prisma.detallePedido.findMany({
+            where: {
+                status: "COMPLETADO",
+                pedido: {
+                    // Opcional: filtrar por pedidos que se pagaron hoy
+                    status_pago: "PAGADO"
+                }
+            },
+            select: {
+                precio: true
+            }
+        });
+
+        // 3. Calculamos el total asegurando que sea un número plano (evita el error 500)
+        const totalRecaudado = platosTerminados.reduce((acc, item) => {
+            const valor = parseFloat(item.precio);
+            return acc + (isNaN(valor) ? 0 : valor);
+        }, 0);
+
+        return {
+            enCaja,
+            enCocina,
+            totalPlatillos,
+            recaudado: totalRecaudado // Enviamos un Number estándar
+        };
+    } catch (error) {
+        console.error("❌ Error en pedidoService (Dashboard):", error.message);
+        throw error;
+    }
+}

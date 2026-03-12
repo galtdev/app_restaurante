@@ -1,5 +1,7 @@
 import prisma from '../config/prisma.js';
 
+// 1. REGISTRAR EL PEDIDO (ESTADO INICIAL)
+// 1. REGISTRAR EL PEDIDO (Versión corregida para Verificación)
 export async function procesarPedido(data) {
     return await prisma.$transaction(async (tx) => {
         
@@ -7,11 +9,9 @@ export async function procesarPedido(data) {
             data: {
                 mesa: data.mesa || "Barra",
                 tipo_pedido: data.tipo_pedido || "Local",
-                status: "pendiente",
-                status_pago: data.status_pago || "Pendiente",
-                caja: {
-                    connect: { id: Number(data.cajaId) }
-                },
+                status: "ESPERANDO_PAGO", // Se queda aquí hasta que caja confirme
+                status_pago: data.status_pago || "PENDIENTE",  
+                caja: { connect: { id: Number(data.cajaId) } },
                 cliente: {
                     connectOrCreate: {
                         where: { cedula: String(data.cedula) },
@@ -25,112 +25,126 @@ export async function procesarPedido(data) {
             }
         });
 
-        const listaProductos = data.productos || data.platillo || [];
-
-        if (listaProductos.length === 0) {
-            throw new Error("El pedido debe contener al menos un producto.");
-        }
-
+        const listaProductos = data.productos || [];
+        
         const detallesPromises = listaProductos.map(p => {
             return tx.detallePedido.create({
                 data: {
                     nombre_platillo: p.nombre_platillo,
                     precio: Number(p.precio),
-                    status: 'Preparacion',
-                    platillo: {
-                        connect: { id: Number(p.id) }
-                    },
-                    cocina: {
-                        connect: { id: Number(data.cocinaId) }
-                    },
-                    pedido: {
-                        connect: { id: nuevoPedido.id }
-                    }
+                    status: 'ESPERANDO_PAGO', // BLOQUEADO para cocina
+                    platillo: { connect: { id: Number(p.id) } },
+                    cocina: { connect: { id: Number(data.cocinaId) } },
+                    pedido: { connect: { id: nuevoPedido.id } }
                 }
             });
         });
 
         await Promise.all(detallesPromises);
 
-
+        // Si el cliente envía datos de pago (Transferencia, etc.)
+        // Registramos el intento de pago, pero NO cambiamos los status a "PAGADO" ni "EN_PREPARACION"
         if (data.pago) {
             await tx.pago.create({
                 data: {
                     monto: Number(data.pago.monto),
                     metodo_pago: data.pago.metodo || "Efectivo",
                     referencia: String(data.pago.referencia || "S/N"),
-                    pedido: {
-                        connect: { id: nuevoPedido.id }
-                    }
+                    pedido: { connect: { id: nuevoPedido.id } }
                 }
+            });
+            
+            // Opcional: Asegurarnos de que el status sea POR_VERIFICAR si hay datos de pago
+            await tx.pedido.update({
+                where: { id: nuevoPedido.id },
+                data: { status_pago: "POR_VERIFICAR" }
             });
         }
 
         return nuevoPedido;
     });
 }
-
-export async function confirmarPedidoEnCaja(pedidoId) {
+// 2. CONFIRMAR PAGO (DISPARADOR PARA COCINA)
+export async function confirmarPedidoEnCaja(pedidoId, datosPago) {
     return await prisma.$transaction(async (tx) => {
-        // 1. El pedido ya es oficial
+        // 1. Si el pago ya existía (POR_VERIFICAR), podrías actualizarlo. 
+        // Si no existía, lo creas.
+        
         await tx.pedido.update({
             where: { id: Number(pedidoId) },
-            data: { status: 'CONFIRMADO', status_pago: 'PAGADO' }
+            data: { 
+                status: 'CONFIRMADO', 
+                status_pago: 'PAGADO' // 👈 Aquí se libera
+            }
         });
 
-        // 2. CAMBIO DE ESTADO: Los platos pasan a 'EN_PREPARACION'
         return await tx.detallePedido.updateMany({
-            where: { 
-                pedidoId: Number(pedidoId),
-                status: 'ESPERANDO_CAJA' 
-            },
-            data: { status: 'EN_PREPARACION' } // 👈 Ahora el monitor de cocina los muestra
+            where: { pedidoId: Number(pedidoId) },
+            data: { status: 'EN_PREPARACION' } // 👈 Ahora el Chef lo ve
         });
     });
 }
 
-// backend/src/services/pedidoService.js
+
 
 export async function consultarPedidosPorCaja(cajaId) {
     return await prisma.pedido.findMany({
         where: {
             cajaId: Number(cajaId),
-            // Opcional: Si solo quieres los que faltan por pagar
-            // status_pago: "Pendiente" 
+            status_pago: {
+                in: ["PENDIENTE", "POR_VERIFICAR"] // 👈 Trae ambos tipos
+            }
         },
         include: {
             cliente: true,
             detalles: true,
-            pago: true
+            pago: true // 👈 Importante para que el cajero vea la referencia/monto que mandó el cliente
         },
-        orderBy: {
-            id: 'desc'
-        }
+        orderBy: { id: 'desc' }
     });
 }
 
-
-// backend/src/services/pedidoService.js
-
+// 4. CONSULTA PARA LA COCINA (LO PAGADO LISTO PARA COCINAR)
 export async function consultarPedidosCocina(cocinaId) {
     return await prisma.detallePedido.findMany({
         where: {
             cocinaId: Number(cocinaId),
-            status: {
-                in: ['Preparacion', 'Pendiente'] // Trae lo que falta por cocinar
-            }
+            status: 'EN_PREPARACION' // 👈 Solo lo que ya se pagó
         },
         include: {
             pedido: {
                 select: {
                     mesa: true,
                     tipo_pedido: true,
-                    id: true // ID del pedido padre
+                    id: true 
                 }
             }
         },
-        orderBy: {
-            pedidoId: 'asc' // Agrupa por pedido
-        }
+        orderBy: { id: 'asc' }
+    });
+}
+
+
+// En pedidoController.js
+export async function finalizarPreparacion(pedidoId) {
+    return await prisma.$transaction(async (tx) => {
+        // 1. Actualizamos todos los platos de ese pedido de golpe
+        const detallesActualizados = await tx.detallePedido.updateMany({
+            where: {
+                pedidoId: Number(pedidoId),
+                status: 'EN_PREPARACION' // Solo los que están en cocina
+            },
+            data: {
+                status: 'COMPLETADO' // Esto hace que desaparezcan de la consulta de cocina
+            }
+        });
+
+        // 2. Actualizamos el estado general del pedido a ENTREGADO
+        await tx.pedido.update({
+            where: { id: Number(pedidoId) },
+            data: { status: 'ENTREGADO' }
+        });
+
+        return detallesActualizados;
     });
 }

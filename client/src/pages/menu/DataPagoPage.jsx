@@ -4,24 +4,23 @@ import { camposPago } from '../../config/formConfig.js';
 import DynamicForm from '../../components/Form.jsx';
 import Button from '../../components/Button.jsx';
 
-export default function PagoPedidoPage() {
+export default function DataPagoPage() {
   const { orderData, resetOrder } = useOutletContext();
   const navigate = useNavigate();
 
-  // 1. Calculamos el monto total de los platillos
   const totalMonto = orderData.step1.reduce((acc, p) => acc + Number(p.precio), 0);
 
   const finalizarPedido = async (dataPago) => {
-    // 2. CONSTRUCCIÓN DEL OBJETO FINAL (Mismo formato que pediste)
+  
     const pedidoFinal = {
       mesa: `Mesa ${orderData.step2.numero_mesa}`,
       tipo_pedido: orderData.step2.tipo_servicio,
-      status_pago: "Pagado",
+      status_pago: "POR_VERIFICAR",
       cedula: orderData.step2.cedula,
       nombre_cliente: orderData.step2.nombre_cliente,
       telefono: orderData.step2.telefono,
-      cajaId: 1, // ID por defecto
-      cocinaId: 1, // ID por defecto
+      cajaId: 1, 
+      cocinaId: 1, 
       productos: orderData.step1.map(p => ({
         id: p.id,
         nombre_platillo: p.nombre_platillo,
@@ -35,13 +34,12 @@ export default function PagoPedidoPage() {
     };
 
     try {
-      // 3. Envío al servidor
       const { data, error } = await api.post('/api/pedido', pedidoFinal);
 
       if (!error) {
         alert("✅ ¡Pedido enviado con éxito a cocina!");
-        resetOrder(); // Limpia el carrito en el Layout
-        navigate('/menu'); // Redirige al inicio del menú
+        resetOrder(); 
+        navigate('/menu'); 
       } else {
         alert("❌ Error: No se pudo procesar el pedido.");
       }

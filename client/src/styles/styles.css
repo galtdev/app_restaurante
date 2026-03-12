@@ -50,11 +50,11 @@ body{
 }
 
 .main-container {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  overflow: hidden;
+    min-height: 100vh; /* Que ocupe al menos el alto de la pantalla */
+    width: 100%;
+    overflow-y: auto;  /* Permite scroll vertical si el contenido crece */
+    display: flex;
+    flex-direction: column;
 }
 
 .main-area {

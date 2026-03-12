@@ -12,6 +12,8 @@ router.post('/', controllerPedido.registrarPedido);
 router.get('/caja/:idCaja', controllerPedido.obtenerPedidosCaja);
 router.get('/cocina/:idCocina', controllerPedido.obtenerPendientesCocina);
 router.get('/:id', controllerPlatillo.one);
+router.put('/confirmar/:idPedido', controllerPedido.confirmarPago);
+router.put('/confirmar-entrega/:idPedido', controllerPedido.terminarComanda);
 
 
 

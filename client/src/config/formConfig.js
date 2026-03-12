@@ -23,6 +23,36 @@ export const camposUsuario = [
 ];
 
 
+// Agrega esto al final de tu archivo formConfig.js
+
+export const camposConfirmarPago = [
+  { 
+    name: 'metodo', 
+    label: 'Método de Pago', 
+    type: 'select', 
+    options: [
+      { value: 'Transferencia', label: 'Transferencia Bancaria' },
+      { value: 'Pago Movil', label: 'Pago Móvil' },
+      { value: 'Efectivo', label: 'Efectivo' },
+      { value: 'Punto de Venta', label: 'Punto de Venta' }
+    ],
+    required: true 
+  },
+  { 
+    name: 'referencia', 
+    label: 'Número de Referencia', 
+    placeholder: 'Ej: 123456', 
+    required: true 
+  },
+  { 
+    name: 'monto', 
+    label: 'Monto Total', 
+    type: 'number', 
+    placeholder: '0.00', 
+    required: true 
+  }
+];
+
 export const camposMenu = [
     { name: 'nombre_platillo', label: 'Nombre del platillo', placeholder:'Introduzca nombre', required: true },
     { name: 'precio', label: 'Precio del platillo', placeholder:'Introduzca precio', required: true },
